@@ -1,32 +1,43 @@
 import { api_url } from './const.js';
 
-getTodayGame();
+const currentGame = setUpGame();
 
-function getTodayGame() {
+async function setUpGame() {
+    var game = await getTodayGame();
+
+    document.getElementById("question1").innerText = game.question1;
+    document.getElementById("question2").innerText = game.question2;
+    document.getElementById("question3").innerText = game.question3;
+    document.getElementById("questionA").innerText = game.questionA;
+    document.getElementById("questionB").innerText = game.questionB;
+    document.getElementById("questionC").innerText = game.questionC;
+
+    return game;
+}
+
+async function getTodayGame() {
     const todayString = formatDate(new Date(), "yy-mm-dd");
 
     const url = api_url + '?date=' + todayString;
 
-    console.log(url);
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => {
         if (!response.ok) {
             throw new Error('Erro na requisição: ' + response.statusText);
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
         console.error('Erro:', error);
-    });
+        return undefined;
+    }
 }
 
 function formatDate(date, format) {
