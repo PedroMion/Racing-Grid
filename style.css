@@ -38,7 +38,7 @@ body {
 
 .main-box {
     height: 30rem;
-    width: 60rem;
+    width: 50rem;
     margin-top: 10rem;
 }
 
@@ -51,7 +51,7 @@ body {
 }
 
 .column {
-    width: 20rem;
+    width: 16rem;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -70,7 +70,7 @@ body {
 }
 
 .square {
-    width: 85%;
+    width: 95%;
     height: 25%;
     padding: 0.6rem;
     display: flex;
@@ -79,6 +79,12 @@ body {
     justify-content: center;
     border: 0.05rem solid #b81414;
     border-radius: 1.5rem;
+    cursor: pointer;
+}
+
+.square:hover {
+    background-color: #222222;
+    transition: all ease 0.2s;
 }
 
 .response {
