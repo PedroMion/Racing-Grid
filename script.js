@@ -4,20 +4,48 @@ const currentGame = setUpGame();
 
 var eventId;
 
+const overlay = document.getElementById('overlay-response');
+const popup = document.getElementById('popup-response');
+const input = document.getElementById('text-response');
+const button = document.getElementById('send-button');
+
 document.addEventListener('DOMContentLoaded', () => {
     const elements = document.getElementsByClassName('square');
 
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener('click', handleClick);
     }
+
+    button.addEventListener('click', sendResponse);
+    overlay.addEventListener('click', hidePopup);
+    input.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendResponse();
+        }
+    });
 });
+
+ function showPopup() {
+    overlay.style.display = 'flex';
+    popup.style.display = 'flex';
+}
+
+function hidePopup() {
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
 
 function handleClick(event) {
     eventId = event.target.id;
 
-    document.getElementById("overlay-response").style.display = 'flex';
-    document.getElementById("popup-response").style.display = 'flex';
+    showPopup();
 } 
+
+function sendResponse() {
+    hidePopup();
+    
+    console.log(input.value);
+}
 
 async function setUpGame() {
     var game = await getTodayGame();
