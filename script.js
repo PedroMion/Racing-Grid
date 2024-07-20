@@ -1,7 +1,5 @@
 import { api_url } from './const.js';
 
-const currentGame = setUpGame();
-
 var eventId;
 
 const overlay = document.getElementById('overlay-response');
@@ -11,11 +9,11 @@ const button = document.getElementById('send-button');
 
 document.addEventListener('DOMContentLoaded', () => {
     const elements = document.getElementsByClassName('square');
-
+    
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener('click', handleClick);
     }
-
+    
     button.addEventListener('click', sendResponse);
     overlay.addEventListener('click', hidePopup);
     input.addEventListener('keypress', (event) => {
@@ -25,7 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
- function showPopup() {
+const currentGame = await setUpGame();
+
+function showPopup() {
     overlay.style.display = 'flex';
     popup.style.display = 'flex';
 }
@@ -45,6 +45,7 @@ function sendResponse() {
     hidePopup();
     
     console.log(input.value);
+    input.value = "";
 }
 
 async function setUpGame() {
