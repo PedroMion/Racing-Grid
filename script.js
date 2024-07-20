@@ -2,6 +2,23 @@ import { api_url } from './const.js';
 
 const currentGame = setUpGame();
 
+var eventId;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.getElementsByClassName('square');
+
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('click', handleClick);
+    }
+});
+
+function handleClick(event) {
+    eventId = event.target.id;
+
+    document.getElementById("overlay-response").style.display = 'flex';
+    document.getElementById("popup-response").style.display = 'flex';
+} 
+
 async function setUpGame() {
     var game = await getTodayGame();
 
