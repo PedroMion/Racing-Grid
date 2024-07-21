@@ -5,6 +5,8 @@ const popup = document.getElementById('popup-response');
 const input = document.getElementById('text-response');
 const button = document.getElementById('send-button');
 
+const TOTAL_SQUARES = 9;
+
 document.addEventListener('DOMContentLoaded', () => {
     const elements = document.getElementsByClassName('square');
     
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const currentGame = await setUpGame();
 var eventId;
 var guesses = [];
+var squaresGuesseds = 0;
 
 function showPopup() {
     overlay.style.display = 'flex';
@@ -42,7 +45,22 @@ function handleClick(event) {
 } 
 
 function handleCorrectAnswer() {
-    console.log(input.value);
+    var responseId = 'response' + eventId.substring(eventId.length - 2);
+    squaresGuesseds++;
+
+    const squareDiv = document.getElementById(eventId);
+    const squareText = document.getElementById(responseId);
+
+    squareDiv.removeEventListener('click', handleClick);
+    squareDiv.style.backgroundColor = '#b81414';
+    squareDiv.style.cursor = 'auto';
+    squareText.innerText = input.value;
+
+    if(squaresGuesseds == TOTAL_SQUARES) {
+        window.alert('You won!');
+    }
+
+    input.value = "";
 }
 
 function sendResponse() {
