@@ -52,11 +52,11 @@ function sendResponse() {
 
     const treatedResponse = input.value.replace(" ", "").toLowerCase();
 
-    if(treatedResponse in guesses) {
+    if(guesses.includes(treatedResponse)) {
         return;
     }
 
-    guesses.append(treatedResponse);
+    guesses.push(treatedResponse);
 
     for(var pilot of responses) {
         if(pilot.replace(" ", "").toLowerCase() == treatedResponse) {
