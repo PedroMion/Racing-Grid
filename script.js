@@ -1,7 +1,5 @@
 import { api_url } from './const.js';
 
-var eventId;
-
 const overlay = document.getElementById('overlay-response');
 const popup = document.getElementById('popup-response');
 const input = document.getElementById('text-response');
@@ -24,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const currentGame = await setUpGame();
+var eventId;
+var guesses = [];
 
 function showPopup() {
     overlay.style.display = 'flex';
@@ -41,10 +41,29 @@ function handleClick(event) {
     showPopup();
 } 
 
+function handleCorrectAnswer() {
+    console.log(input.value);
+}
+
 function sendResponse() {
     hidePopup();
     
-    console.log(input.value);
+    const responses = getResponseListBySquareId(eventId);
+
+    const treatedResponse = input.value.replace(" ", "").toLowerCase();
+
+    if(treatedResponse in guesses) {
+        return;
+    }
+
+    guesses.append(treatedResponse);
+
+    for(var pilot of responses) {
+        if(pilot.replace(" ", "").toLowerCase() == treatedResponse) {
+            return handleCorrectAnswer();
+        }
+    }
+
     input.value = "";
 }
 
@@ -92,4 +111,27 @@ function formatDate(date, format) {
 	                        .replace('dd', date.getDate());
 
     return result;
+}
+
+function getResponseListBySquareId(id) {
+    switch(id) {
+        case 'square1A':
+            return currentGame.square1A
+        case 'square1B':
+            return currentGame.square1B
+        case 'square1C':
+            return currentGame.square1C
+        case 'square2A':
+            return currentGame.square2A
+        case 'square2B':
+            return currentGame.square2B
+        case 'square2C':
+            return currentGame.square2C
+        case 'square3A':
+            return currentGame.square3A
+        case 'square3B':
+            return currentGame.square3B
+        case 'square3C':
+            return currentGame.square3C
+    }
 }
