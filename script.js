@@ -1,9 +1,11 @@
 import { api_url } from './const.js';
 
 const overlay = document.getElementById('overlay-response');
-const popup = document.getElementById('popup-response');
+const responsePopup = document.getElementById('popup-response');
+const gamePopup = document.getElementById('popup-game');
 const input = document.getElementById('text-response');
-const button = document.getElementById('send-button');
+const sendButton = document.getElementById('send-button');
+const gameButton = document.getElementById('game-button');
 
 const TOTAL_SQUARES = 9;
 
@@ -14,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         elements[i].addEventListener('click', handleClick);
     }
     
-    button.addEventListener('click', sendResponse);
+    sendButton.addEventListener('click', sendResponse);
+    gameButton.addEventListener('click', changeGame)
     overlay.addEventListener('click', hidePopup);
     input.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
@@ -24,24 +27,31 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const currentGame = await setUpGame();
+const maxId = currentGame.id;
+
 var eventId;
 var guesses = [];
 var squaresGuesseds = 0;
 
-function showPopup() {
+function showPopup(popup) {
     overlay.style.display = 'flex';
-    popup.style.display = 'flex';
+    if(popup == 'response') {
+        responsePopup.style.display = 'flex';
+    } else {
+        gamePopup.style.display = 'flex';
+    }
 }
 
 function hidePopup() {
     overlay.style.display = 'none';
-    popup.style.display = 'none';
+    responsePopup.style.display = 'none';
+    gamePopup.style.display = 'none';
 }
 
 function handleClick(event) {
     eventId = event.target.id;
 
-    showPopup();
+    showPopup('response');
 } 
 
 function handleCorrectAnswer(pilot) {
@@ -85,6 +95,12 @@ function sendResponse() {
     input.value = "";
 }
 
+function changeGame() {
+    
+    
+    showPopup('game');
+}
+
 async function setUpGame() {
     var game = await getTodayGame();
 
@@ -95,7 +111,20 @@ async function setUpGame() {
     document.getElementById("questionB").innerText = game.questionB;
     document.getElementById("questionC").innerText = game.questionC;
 
+    setGamesOptions(game.id);
+
     return game;
+}
+
+function setGamesOptions(id) {
+    for (let i = 0; i <= id; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        selectValues.appendChild(option);
+    }
+
+    selectValues.value = id;
 }
 
 async function getTodayGame() {
