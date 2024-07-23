@@ -44,7 +44,7 @@ function handleClick(event) {
     showPopup();
 } 
 
-function handleCorrectAnswer() {
+function handleCorrectAnswer(pilot) {
     var responseId = 'response' + eventId.substring(eventId.length - 2);
     squaresGuesseds++;
 
@@ -54,7 +54,7 @@ function handleCorrectAnswer() {
     squareDiv.removeEventListener('click', handleClick);
     squareDiv.style.backgroundColor = '#b81414';
     squareDiv.style.cursor = 'auto';
-    squareText.innerText = input.value;
+    squareText.innerText = pilot;
 
     if(squaresGuesseds == TOTAL_SQUARES) {
         window.alert('You won!');
@@ -78,7 +78,7 @@ function sendResponse() {
 
     for(var pilot of responses) {
         if(pilot.replace(" ", "").toLowerCase() == treatedResponse) {
-            return handleCorrectAnswer();
+            return handleCorrectAnswer(pilot);
         }
     }
 
