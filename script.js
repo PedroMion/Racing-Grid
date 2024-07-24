@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const currentGame = await getTodayGame();
-setUpGame(currentGame);
+var currentGame = await getTodayGame();
+setUpGame(currentGame, true);
 const maxId = currentGame.id;
 
 var eventId;
@@ -109,13 +109,14 @@ async function getNewBoard() {
     const url = api_url + '/' + id;
 
     var newGame = await requestGameByUrl(url);
+    currentGame = newGame;
 
-    setUpGame(newGame);
+    setUpGame(newGame, false);
 
     hidePopup('game');
 }
 
-function setUpGame(game) {
+function setUpGame(game, firstGame) {
     document.getElementById("question1").innerText = game.question1;
     document.getElementById("question2").innerText = game.question2;
     document.getElementById("question3").innerText = game.question3;
@@ -123,17 +124,19 @@ function setUpGame(game) {
     document.getElementById("questionB").innerText = game.questionB;
     document.getElementById("questionC").innerText = game.questionC;
 
-    setGamesOptions(game.id);
+    setGamesOptions(game.id, firstGame);
 
     return game;
 }
 
-function setGamesOptions(id) {
-    for (let i = 1; i <= id; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        selectValues.appendChild(option);
+function setGamesOptions(id, firstGame) {
+    if(firstGame) {
+        for (let i = 1; i <= id; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            selectValues.appendChild(option);
+        }
     }
 
     selectValues.value = id;
