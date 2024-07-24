@@ -6,6 +6,7 @@ const gamePopup = document.getElementById('popup-game');
 const input = document.getElementById('text-response');
 const sendButton = document.getElementById('send-button');
 const gameButton = document.getElementById('game-button');
+const changeGameButton = document.getElementById('change-game');
 
 const TOTAL_SQUARES = 9;
 
@@ -17,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     sendButton.addEventListener('click', sendResponse);
-    gameButton.addEventListener('click', changeGame)
+    gameButton.addEventListener('click', changeGame);
+    changeGameButton.addEventListener('click', getNewBoard)
     overlay.addEventListener('click', hidePopup);
     input.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
@@ -26,7 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const currentGame = await setUpGame();
+const currentGame = await getTodayGame();
+setUpGame(currentGame);
 const maxId = currentGame.id;
 
 var eventId;
@@ -101,9 +104,18 @@ function changeGame() {
     showPopup('game');
 }
 
-async function setUpGame() {
-    var game = await getTodayGame();
+async function getNewBoard() {
+    const id = document.getElementById('selectValues').value;
+    const url = api_url + '/' + id;
 
+    var newGame = await requestGameByUrl(url);
+
+    setUpGame(newGame);
+
+    hidePopup('game');
+}
+
+function setUpGame(game) {
     document.getElementById("question1").innerText = game.question1;
     document.getElementById("question2").innerText = game.question2;
     document.getElementById("question3").innerText = game.question3;
@@ -117,7 +129,7 @@ async function setUpGame() {
 }
 
 function setGamesOptions(id) {
-    for (let i = 0; i <= id; i++) {
+    for (let i = 1; i <= id; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;
@@ -125,13 +137,10 @@ function setGamesOptions(id) {
     }
 
     selectValues.value = id;
+    gameButton.textContent = 'Racing Grid #' + id;
 }
 
-async function getTodayGame() {
-    const todayString = formatDate(new Date(), "yy-mm-dd");
-
-    const url = api_url + '?date=' + todayString;
-
+async function requestGameByUrl(url) {
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -150,6 +159,14 @@ async function getTodayGame() {
         console.error('Erro:', error);
         return undefined;
     }
+}
+
+async function getTodayGame() {
+    const todayString = formatDate(new Date(), "yy-mm-dd");
+
+    const url = api_url + '?date=' + todayString;
+
+    return await requestGameByUrl(url);
 }
 
 function formatDate(date, format) {
