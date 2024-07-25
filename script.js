@@ -1,4 +1,4 @@
-import { api_url } from './const.js';
+import { api_url, squares } from './const.js';
 
 const overlay = document.getElementById('overlay-response');
 const responsePopup = document.getElementById('popup-response');
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 var currentGame = await getTodayGame();
 setUpGame(currentGame, true);
-const maxId = currentGame.id;
 
 var eventId;
 var guesses = [];
@@ -104,6 +103,24 @@ function changeGame() {
     showPopup('game');
 }
 
+function resetSquare(elementId) {
+    const div = document.getElementById(elementId);
+    const text = document.getElementById('response' + elementId.substring(elementId.length - 2))
+
+    div.addEventListener('click', handleClick);
+    div.style.backgroundColor = '#252629';
+    div.style.cursor = 'pointer';
+    text.innerText = "";
+}
+
+function resetCurrentBody() {
+    squaresGuesseds = 0;
+
+    for(var elem of squares) {
+        resetSquare(elem);
+    }
+}
+
 async function getNewBoard() {
     const id = document.getElementById('selectValues').value;
     const url = api_url + '/' + id;
@@ -112,6 +129,7 @@ async function getNewBoard() {
     currentGame = newGame;
 
     setUpGame(newGame, false);
+    resetCurrentBody();
 
     hidePopup('game');
 }
