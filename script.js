@@ -3,6 +3,7 @@ import { api_url, squares } from './const.js';
 const overlay = document.getElementById('overlay-response');
 const responsePopup = document.getElementById('popup-response');
 const gamePopup = document.getElementById('popup-game');
+const victoryPopup = document.getElementById('popup-victory');
 const input = document.getElementById('text-response');
 const sendButton = document.getElementById('send-button');
 const gameButton = document.getElementById('game-button');
@@ -39,6 +40,8 @@ function showPopup(popup) {
     overlay.style.display = 'flex';
     if(popup == 'response') {
         responsePopup.style.display = 'flex';
+    } else if(popup == 'victory') {
+        victoryPopup.style.display = 'flex';
     } else {
         gamePopup.style.display = 'flex';
     }
@@ -48,6 +51,7 @@ function hidePopup() {
     overlay.style.display = 'none';
     responsePopup.style.display = 'none';
     gamePopup.style.display = 'none';
+    victoryPopup.style.display = 'none';
 }
 
 function handleClick(event) {
@@ -69,7 +73,7 @@ function handleCorrectAnswer(pilot) {
     squareText.innerText = pilot;
 
     if(squaresGuesseds == TOTAL_SQUARES) {
-        window.alert('You won!');
+        showPopup('victory');
     }
 
     input.value = "";
@@ -115,6 +119,7 @@ function resetSquare(elementId) {
 
 function resetCurrentBody() {
     squaresGuesseds = 0;
+    guesses = [];
 
     for(var elem of squares) {
         resetSquare(elem);

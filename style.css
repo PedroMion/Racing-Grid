@@ -225,3 +225,8 @@ select:focus {
     border-color: #66afe9;
     box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
 }
+
+.text {
+    font-size: 1.5rem;
+    color: whitesmoke;
+}
